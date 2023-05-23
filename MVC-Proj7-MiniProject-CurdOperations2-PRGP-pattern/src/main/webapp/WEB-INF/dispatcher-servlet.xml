@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- view Resolver cfgs -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- enable component scan -->
+	<context:component-scan base-package="com.nt" />
+	<!-- configure location for extra resources like image java script files 
+		and etc -->
+	<mvc:resources location="/resources/"
+		mapping="/resources/**" />
+		<mvc:annotation-driven></mvc:annotation-driven>
+		
+	<!-- Hikaricp JDBC connection pool -->
+	<bean id="hkDS" class="com.zaxxer.hikari.HikariDataSource">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="jdbcUrl"
+			value="jdbc:oracle:thin:@localhost:1521:orcl" />
+		<property name="username" value="kamal" />
+		<property name="password" value="123" />
+		<property name="minimumIdle" value="10" />
+		<property name="maximumPoolSize" value="100" />
+	</bean>
+<!-- 	JDBC templet Configuration -->
+		<bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate">
+			<property name="dataSource" ref="hkDS"/>
+		</bean>
+	
+</beans>

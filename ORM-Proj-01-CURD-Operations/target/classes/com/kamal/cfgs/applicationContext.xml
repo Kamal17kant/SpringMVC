@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		
+		<!--	Data configuration -->
+		<bean id="hkDs" class="com.zaxxer.hikari.HikariDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+		<property name="username" value="kamal"/>
+		<property name="password" value="123"/>
+		<property name="minimumIdle" value="10"/>
+		<property name="maximumPoolSize" value="100"/>
+		<property name="idleTimeout" value="2000"/>
+		</bean>
+		
+	<!-- 	Local session factory been cfg to get Hibernate session factroy-->
+	<bean id="sesfact" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	<property name="dataSource" ref="hkDs"/>
+	<property name="annotatedClasses">
+	<list>
+	<value>com.kamal.entity.Employee</value>
+	</list>
+	</property>
+	<property name="hibernateProperties">
+	<props>
+		<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+		<prop key="hibernate.hbm2ddl.auto">update</prop>
+		<prop key="hibernate.show_sql">true</prop>
+		<prop key="hibernate.format_sql">true</prop>
+	</props>
+	</property>
+	</bean>
+<!-- 	cfg Hibernate template class -->
+	<bean id="template" class="org.springframework.orm.hibernate5.HibernateTemplate">
+	<property name="sessionFactory" ref="sesfact"></property>
+	</bean>
+<!-- 	 Cfg the hibernateTransactionManager -->
+	<bean id="hbTxMgmr" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sesfact"></property>
+	</bean>
+<!--    enable component scanning -->
+	<context:component-scan base-package="com.kamal"/>
+<!-- 	perform annotation driven TxMgmt -->
+		<tx:annotation-driven transaction-manager="hbTxMgmr"/>
+</beans>
