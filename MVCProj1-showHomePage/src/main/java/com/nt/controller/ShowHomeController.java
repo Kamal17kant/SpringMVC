@@ -5,11 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ShowHomeController {
-	/*
-	 * @RequestMapping("/home") public String showHomePage() {//HAndeler Method
-	 * 
-	 * return "Welcome"; }
-	 */
+	
 	@RequestMapping("/")
 	public String showHomePage() {//HAndeler Method
 		
